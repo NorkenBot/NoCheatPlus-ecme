@@ -44,7 +44,9 @@ public class LocUtil {
             Material.SNOW, Material.TALL_GRASS, Material.FIRE, Material.VOID_AIR,
             Material.BEDROCK, Material.END_PORTAL_FRAME, Material.POPPY,
             Material.LARGE_FERN, Material.SWEET_BERRY_BUSH, Material.DANDELION,
-            Material.CAVE_AIR, Material.FERN);
+            Material.POWERED_RAIL, Material.RAIL, Material.ACTIVATOR_RAIL,
+            Material.DETECTOR_RAIL, Material.CAVE_AIR, Material.FERN,
+            Material.NETHER_PORTAL);
 
     public static int hashCode(final Location location) {
         final World world = location.getWorld();
