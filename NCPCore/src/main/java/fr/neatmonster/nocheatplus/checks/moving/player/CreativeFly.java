@@ -14,10 +14,12 @@
  */
 package fr.neatmonster.nocheatplus.checks.moving.player;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
+import fr.neatmonster.nocheatplus.logging.StaticLog;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -58,6 +60,7 @@ import fr.neatmonster.nocheatplus.utilities.map.BlockProperties;
  */
 public class CreativeFly extends Check {
 
+    public static HashMap<String, Integer> rocketLeniency = new HashMap<String, Integer>();
     private final List<String> tags = new LinkedList<String>();
     private final BlockChangeTracker blockChangeTracker;
     private IGenericInstanceHandle<IAttributeAccess> attributeAccess = NCPAPIProvider.getNoCheatPlusAPI().getGenericInstanceHandle(IAttributeAccess.class);
@@ -269,7 +272,7 @@ public class CreativeFly extends Check {
                     vd.setParameter(ParameterName.TAGS, StringUtil.join(tags, "+"));
                 }
             }
-            if (executeActions(vd).willCancel()) {
+            if (executeActions(vd).willCancel() && CreativeFly.rocketLeniency.get(player.getDisplayName()) <= 0) {
                 // Compose a new location based on coordinates of "newTo" and viewing direction of "event.getTo()"
                 // to allow the player to look somewhere else despite getting pulled back by NoCheatPlus.
                 setBack = data.getSetBack(to); // (OK)
@@ -589,6 +592,10 @@ public class CreativeFly extends Check {
          * Fly out water with low envelope
          * Head obstructed ?
          */
+        if (!rocketLeniency.containsKey(player.getDisplayName())) {
+            rocketLeniency.put(player.getDisplayName(), 0);
+            StaticLog.logInfo("Adding player entry for "+player.getDisplayName());
+        }
         double resultV = 0.0;
         double resultH = 0.0;
         if (!cc.elytraStrict || !Bridge1_9.isGlidingWithElytra(player) || player.isFlying()) return new double[] {0.0, 0.0};
@@ -651,6 +658,7 @@ public class CreativeFly extends Check {
             // Fireworks
             // Can't be more precise due to some problems, still have ~10% faster bypasses :(
             if (data.fireworksBoostDuration > 0) {
+                rocketLeniency.put(player.getDisplayName(), 80);
                 // Handled somewhere else
                 // TODO: More strict vertical check
                 thisMove.yAllowedDistance = allwyDistance = yDistance;
