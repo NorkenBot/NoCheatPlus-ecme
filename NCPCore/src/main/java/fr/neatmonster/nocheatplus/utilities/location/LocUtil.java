@@ -38,27 +38,8 @@ import java.util.List;
  */
 public class LocUtil {
 
-    public static final List<Material> NonGlitchBlocks = Arrays.asList(
-            Material.AIR, Material.LAVA, Material.WATER, Material.GRASS,
-            Material.VINE, Material.SEAGRASS, Material.TALL_SEAGRASS,
-            Material.SNOW, Material.TALL_GRASS, Material.FIRE, Material.VOID_AIR,
-            Material.BEDROCK, Material.END_PORTAL_FRAME, Material.POPPY,
-            Material.LARGE_FERN, Material.SWEET_BERRY_BUSH, Material.DANDELION,
-            Material.POWERED_RAIL, Material.RAIL, Material.ACTIVATOR_RAIL,
-            Material.DETECTOR_RAIL, Material.CAVE_AIR, Material.FERN,
-            Material.BLACK_CARPET, Material.BLUE_CARPET, Material.BROWN_CARPET,
-            Material.CYAN_CARPET, Material.GRAY_CARPET, Material.GREEN_CARPET,
-            Material.LIGHT_BLUE_CARPET, Material.LIGHT_GRAY_CARPET, Material.LIME_CARPET,
-            Material.MAGENTA_CARPET, Material.ORANGE_CARPET, Material.PINK_CARPET,
-            Material.PURPLE_CARPET, Material.RED_CARPET, Material.WHITE_CARPET,
-            Material.YELLOW_CARPET, Material.ACACIA_SIGN, Material.ACACIA_WALL_SIGN,
-            Material.BIRCH_SIGN, Material.BIRCH_WALL_SIGN, Material.DARK_OAK_SIGN,
-            Material.DARK_OAK_WALL_SIGN, Material.JUNGLE_SIGN, Material.JUNGLE_WALL_SIGN,
-            Material.OAK_SIGN, Material.OAK_WALL_SIGN, Material.SPRUCE_SIGN, Material.SPRUCE_WALL_SIGN,
-            Material.SUGAR_CANE, Material.CRIMSON_SIGN, Material.CRIMSON_WALL_SIGN,
-            Material.CRIMSON_ROOTS, Material.WARPED_ROOTS,
-            Material.NETHER_PORTAL, Material.CHEST, Material.TRAPPED_CHEST);
-
+    public static final List<Material> RaiseBlocks = Arrays.asList(
+            Material.OBSIDIAN, Material.CRYING_OBSIDIAN, Material.NETHERITE_BLOCK);
 
     public static final List<Material> GlitchBlocks = Arrays.asList(
             Material.OBSIDIAN, Material.CRYING_OBSIDIAN, Material.ENDER_CHEST, Material.ENCHANTING_TABLE, Material.NETHERITE_BLOCK);
@@ -257,6 +238,16 @@ public class LocUtil {
      *             if loc.getWorld() is null.
      */
     public static final void set(final Location setBack, final RichBoundsLocation loc) {
+        Block block = setBack.getBlock();
+        if (RaiseBlocks.contains(block.getType())) {
+            setBack.setWorld(testWorld(loc.getWorld()));
+            setBack.setX(loc.getX());
+            setBack.setY(loc.getY()+1);
+            setBack.setZ(loc.getZ());
+            setBack.setYaw(loc.getYaw());
+            setBack.setPitch(loc.getPitch());
+            return;
+        }
         setBack.setWorld(testWorld(loc.getWorld()));
         setBack.setX(loc.getX());
         setBack.setY(loc.getY());
